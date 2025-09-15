@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Changer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .circle {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background-color: #333;
+            border: 5px solid #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transition: background-color 0.3s ease;
+            margin-bottom: 30px;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 15px;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Color Changer</h1>
+
+    <div id="circle" class="circle"></div>
+
+    <div class="button-container">
+        <button id="btn-1">Red</button>
+        <button id="btn-2">Blue</button>
+        <button id="btn-3">Green</button>
+        <button id="btn-4">Yellow</button>
+    </div>
+
+    <script>
+        const circle = document.getElementById('circle');
+        const button1 = document.getElementById('btn-1');
+        const button2 = document.getElementById('btn-2');
+        const button3 = document.getElementById('btn-3');
+        const button4 = document.getElementById('btn-4');
+
+        const color1 = '#e74c3c';
+        const color2 = '#3498db';
+        const color3 = '#2ecc71';
+        const color4 = '#f1c40f';
+
+        button1.style.backgroundColor = color1;
+        button2.style.backgroundColor = color2;
+        button3.style.backgroundColor = color3;
+        button4.style.backgroundColor = color4;
+
+        button1.addEventListener('click', () => {
+            circle.style.backgroundColor = color1;
+        });
+
+        button2.addEventListener('click', () => {
+            circle.style.backgroundColor = color2;
+        });
+
+        button3.addEventListener('click', () => {
+            circle.style.backgroundColor = color3;
+        });
+
+        button4.addEventListener('click', () => {
+            circle.style.backgroundColor = color4;
+        });
+    </script>
+
+</body>
+</html>
