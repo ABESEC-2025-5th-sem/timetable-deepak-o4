@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Day 13 - Image Slider</title>
+  <link rel="stylesheet" href="styles.css">
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    const ImageSlider = ({ slides }) => {
+        const [currentIndex, setCurrentIndex] = useState(0);
+
+        const goToPrevious = () => {
+            const isFirstSlide = currentIndex === 0;
+            const newIndex = isFirstSlide ? slides.length - 1 : currentIndex - 1;
+            setCurrentIndex(newIndex);
+        };
+
+        const goToNext = () => {
+            const isLastSlide = currentIndex === slides.length - 1;
+            const newIndex = isLastSlide ? 0 : currentIndex + 1;
+            setCurrentIndex(newIndex);
+        };
+
+        const goToSlide = (slideIndex) => {
+            setCurrentIndex(slideIndex);
+        };
+
+        return (
+            <div className="slider">
+                <div
+                    className="slide"
+                    style={{ backgroundImage: `url(${slides[currentIndex].url})` }}
+                ></div>
+
+                <button className="nav left" onClick={goToPrevious} aria-label="Previous">◀</button>
+                <button className="nav right" onClick={goToNext} aria-label="Next">▶</button>
+
+                <div className="dots">
+                    {slides.map((_, i) => (
+                        <button
+                            key={i}
+                            className={`dot ${i === currentIndex ? 'active' : ''}`}
+                            onClick={() => goToSlide(i)}
+                            aria-label={`Go to slide ${i+1}`}
+                        />
+                    ))}
+                </div>
+            </div>
+        );
+    };
+
+    function App() {
+        const slides = [
+            { url: 'https://images.pexels.com/photos/325044/pexels-photo-325044.jpeg', title: 'Forest Road' },
+            { url: 'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg', title: 'Misty Mountains' },
+        ];
+
+        return (
+            <div className="app">
+                <h1>My Simple Image Slider</h1>
+                <ImageSlider slides={slides} />
+            </div>
+        );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

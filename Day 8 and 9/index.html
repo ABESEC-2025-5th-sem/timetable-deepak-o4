@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazon WebApp - Online Shopping</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="App.css">
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { useState } = React;
+
+        const App = () => {
+          // Amazon-style product data
+          const [foodItems] = useState([
+            {
+              id: 1,
+              name: 'Apple iPhone 15 Pro Max (256GB) - Natural Titanium',
+              price: 134900,
+              originalPrice: 159900,
+              image: 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=300&h=200&fit=crop',
+              category: 'Electronics',
+              description: 'Latest iPhone with A17 Pro chip, titanium design, and advanced camera system',
+              rating: 4.5,
+              reviews: 2456,
+              discount: 16
+            },
+            {
+              id: 2,
+              name: 'Sony WH-1000XM5 Wireless Noise Canceling Headphones',
+              price: 24990,
+              originalPrice: 29990,
+              image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=200&fit=crop',
+              category: 'Electronics',
+              description: 'Industry-leading noise canceling with premium sound quality',
+              rating: 4.7,
+              reviews: 8934,
+              discount: 17
+            },
+            {
+              id: 3,
+              name: 'Nike Air Force 1 07 Sneakers',
+              price: 7495,
+              originalPrice: 8995,
+              image: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=300&h=200&fit=crop',
+              category: 'Fashion',
+              description: 'Classic white leather sneakers with iconic Nike swoosh',
+              rating: 4.3,
+              reviews: 15678,
+              discount: 17
+            },
+            {
+              id: 4,
+              name: 'Samsung 65" 4K Ultra HD Smart LED TV',
+              price: 54990,
+              originalPrice: 69990,
+              image: 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=300&h=200&fit=crop',
+              category: 'Electronics',
+              description: 'Crystal clear 4K display with HDR and smart TV features',
+              rating: 4.4,
+              reviews: 3421,
+              discount: 21
+            },
+            {
+              id: 5,
+              name: 'Bestseller Men Casual Shirt - Cotton Blend',
+              price: 999,
+              originalPrice: 1999,
+              image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=300&h=200&fit=crop',
+              category: 'Fashion',
+              description: 'Comfortable cotton blend shirt perfect for casual wear',
+              rating: 4.1,
+              reviews: 5678,
+              discount: 50
+            },
+            {
+              id: 6,
+              name: 'Philips Air Fryer HD9252/90 - 4.1L Capacity',
+              price: 8990,
+              originalPrice: 12990,
+              image: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?w=300&h=200&fit=crop',
+              category: 'Home & Kitchen',
+              description: 'Healthy cooking with 90% less fat, rapid air technology',
+              rating: 4.6,
+              reviews: 12456,
+              discount: 31
+            }
+          ]);
+
+          const [cart, setCart] = useState([]);
+          const [selectedCategory, setSelectedCategory] = useState('All');
+          const [isCartOpen, setIsCartOpen] = useState(false);
+
+          // Get unique categories
+          const categories = ['All', ...new Set(foodItems.map(item => item.category))];
+
+          // Filter items by category
+          const filteredItems = selectedCategory === 'All' 
+            ? foodItems 
+            : foodItems.filter(item => item.category === selectedCategory);
+
+          // Add item to cart
+          const addToCart = (item) => {
+            const existingItem = cart.find(cartItem => cartItem.id === item.id);
+            if (existingItem) {
+              setCart(cart.map(cartItem => 
+                cartItem.id === item.id 
+                  ? { ...cartItem, quantity: cartItem.quantity + 1 }
+                  : cartItem
+              ));
+            } else {
+              setCart([...cart, { ...item, quantity: 1 }]);
+            }
+          };
+
+          // Remove item from cart
+          const removeFromCart = (itemId) => {
+            setCart(cart.filter(item => item.id !== itemId));
+          };
+
+          // Update quantity in cart
+          const updateQuantity = (itemId, newQuantity) => {
+            if (newQuantity === 0) {
+              removeFromCart(itemId);
+            } else {
+              setCart(cart.map(item => 
+                item.id === itemId 
+                  ? { ...item, quantity: newQuantity }
+                  : item
+              ));
+            }
+          };
+
+          // Calculate total price with proper formatting
+          const calculateTotal = () => {
+            return cart.reduce((total, item) => total + (item.price * item.quantity), 0).toLocaleString();
+          };
+
+          // Food Item Component
+          const FoodItem = ({ item }) => (
+            <div className="food-item">
+              <img src={item.image} alt={item.name} className="food-image" />
+              <div className="food-info">
+                <h3>{item.name}</h3>
+                <div className="rating">
+                  <span className="stars">{'★'.repeat(Math.floor(item.rating))}{'☆'.repeat(5-Math.floor(item.rating))}</span>
+                  <span className="rating-text">{item.rating} ({item.reviews.toLocaleString()})</span>
+                </div>
+                <p className="description">{item.description}</p>
+                <div className="price-section">
+                  <div className="price-info">
+                    <span className="price">₹{item.price.toLocaleString()}</span>
+                    {item.originalPrice && (
+                      <>
+                        <span className="original-price">₹{item.originalPrice.toLocaleString()}</span>
+                        <span className="discount">({item.discount}% off)</span>
+                      </>
+                    )}
+                  </div>
+                  <button onClick={() => addToCart(item)} className="add-btn">
+                    Add to Cart
+                  </button>
+                </div>
+              </div>
+            </div>
+          );
+
+          // Cart Item Component
+          const CartItem = ({ item }) => (
+            <div className="cart-item">
+              <div className="cart-item-info">
+                <h4>{item.name}</h4>
+                <span className="cart-item-price">₹{item.price.toLocaleString()}</span>
+              </div>
+              <div className="quantity-controls">
+                <button onClick={() => updateQuantity(item.id, item.quantity - 1)}>-</button>
+                <span>{item.quantity}</span>
+                <button onClick={() => updateQuantity(item.id, item.quantity + 1)}>+</button>
+              </div>
+              <button onClick={() => removeFromCart(item.id)} className="remove-btn">×</button>
+            </div>
+          );
+
+          return (
+            <div className="app">
+              {/* Header */}
+              <header className="header">
+                <div className="container">
+                  <h1 className="logo">📦 Amazon WebApp</h1>
+                  <button 
+                    className="cart-button" 
+                    onClick={() => setIsCartOpen(!isCartOpen)}
+                  >
+                    🛒 Cart ({cart.reduce((total, item) => total + item.quantity, 0)})
+                  </button>
+                </div>
+              </header>
+
+              <div className="container">
+                {/* Category Filter */}
+                <div className="categories">
+                  {categories.map(category => (
+                    <button
+                      key={category}
+                      className={`category-btn ${selectedCategory === category ? 'active' : ''}`}
+                      onClick={() => setSelectedCategory(category)}
+                    >
+                      {category}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Main Content */}
+                <div className="main-content">
+                  {/* Food Items Grid */}
+                  <div className="food-grid">
+                    {filteredItems.map(item => (
+                      <FoodItem key={item.id} item={item} />
+                    ))}
+                  </div>
+
+                  {/* Cart Sidebar */}
+                  {isCartOpen && (
+                    <div className="cart-sidebar">
+                      <div className="cart-header">
+                        <h2>Your Order</h2>
+                        <button onClick={() => setIsCartOpen(false)} className="close-cart">×</button>
+                      </div>
+                      
+                      {cart.length === 0 ? (
+                        <p className="empty-cart">Your cart is empty</p>
+                      ) : (
+                        <>
+                          <div className="cart-items">
+                            {cart.map(item => (
+                              <CartItem key={item.id} item={item} />
+                            ))}
+                          </div>
+                          
+                          <div className="cart-footer">
+                            <div className="total">
+                              <strong>Total: ₹{calculateTotal()}</strong>
+                            </div>
+                            <button className="checkout-btn">
+                              Proceed to Checkout
+                            </button>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Cart Overlay */}
+              {isCartOpen && <div className="cart-overlay" onClick={() => setIsCartOpen(false)}></div>}
+            </div>
+          );
+        };
+
+        // Render the App
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
