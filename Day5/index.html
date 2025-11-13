@@ -5,8 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GRID WORK</title>
     <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="enhanced-grid.css">
+    <style>
+        .title {
+            text-align: center;
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            animation: fadeInDown 1s ease-out;
+        }
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
 <body>
+    <h1 class="title">Enhanced Grid Layout Demo</h1>
     <div id="container-box">
         <div class="box">
             <div class="box1">box1a</div>
