@@ -1,6 +1,11 @@
 const fs = require('fs');
 //fs.appendFileSync('./.abes.txt', ' Appended Data 1');
-fs.appendFile('./.abes.txt', ' Appended Data 2', e => {
+//fs.appendFile('./.abes.txt', ' Appended Data 2', e => {
+  //  if (e) throw e;
+    //console.log('Data Appended Successfully');
+//});
+//fs.copyFileSync('./.abes.txt', './a1.txt');
+fs.copyFile('./.abes.txt', './a2.txt', e => {
     if (e) throw e;
-    console.log('Data Appended Successfully');
+    console.log('File Copied Successfully');
 });
