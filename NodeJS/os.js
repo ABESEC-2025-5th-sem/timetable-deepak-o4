@@ -1,0 +1,12 @@
+const os = require('os');
+console.log('System Platform:', os.platform());
+console.log('User Info:', os.userInfo());
+console.log('CPU:', os.arch());
+console.log('Free Memory:', os.freemem());
+console.log('Total Memory:', os.totalmem());
+console.log('Home Directory:', os.homedir());
+console.log('Uptime:', os.uptime());
+console.log('Network Interfaces:', os.networkInterfaces());     
+console.log('Endianness:', os.endianness());    
+console.log('Temporary Directory:', os.tmpdir());   
+console.log('Hostname:', os.hostname());
